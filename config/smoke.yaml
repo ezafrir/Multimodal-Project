@@ -1,0 +1,36 @@
+# Proposed smoke configuration for the six-week project.
+
+project: trace_driven_vehicle_verification
+mode: cpu_replay
+seed: 17
+execution:
+  device: cpu
+  train_models: false
+  use_cached_predictions: true
+data:
+  source: synthetic
+  path: data/fixtures/smoke.jsonl
+  max_cases: 6
+  evaluator_only_ground_truth: true
+claims:
+  allowed_types: [object_existence, object_distance]
+  frame: ego
+verification:
+  timestamp_tolerance_ms: 100
+  distance_tolerance_m: 2.0
+  min_lidar_returns: 3
+  require_valid_coverage: true
+  require_valid_association: true
+  on_missing_evidence: uncertain
+action_gate:
+  fail_closed: true
+  permitted_action: simulate_generic_proximity_alert
+  high_risk_policy: handoff
+trace:
+  enabled: true
+  evidence_dependencies: true
+  receipt_format: jsonl
+  output: artifacts/smoke/receipts.jsonl
+fault_injection:
+  enabled: true
+  deterministic: true
